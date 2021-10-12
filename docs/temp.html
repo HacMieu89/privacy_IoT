@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Smart Lease</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="SmartLease, ethereum, blockchain" name="keywords">
+    <meta content="SmartLease blockchain solution" name="description">
+    
+    <!-- Favicons -->
+    <link href="img/favicon.png" rel="icon">
+    <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Poppins:300,400,500,700" rel="stylesheet">
+    
+    <!-- Bootstrap CSS File -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Libraries CSS Files -->
+    <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    
+    <!-- Main Stylesheet File -->
+    <link href="css/contract_style.css" rel="stylesheet">
+  </head>
+  
+  <body>
+    
+    <!--==========================
+	Header
+	============================-->
+    <header id="header">
+      <div class="container">
+        <div id="logo" class="pull-left">
+          <a href="index.html"><img src="img/logo_color.png" width="50px" alt="SmartLease Logo" title="SmartLease" /></a>
+        </div>
+	      <nav id="nav-menu-container">
+          <ul class="nav-menu">
+            <li class="menu-active"><a href="index.html#hero">Home</a></li>
+            <li><a href="index.html#about">About Us</a></li>
+            <li><a href="index.html#team">Team</a></li>
+            <li><a href="index.html#contact">Contact Us</a></li>
+            <li><a href="contracts.html">Contracts</a></li>
+	        </ul>
+        </nav><!-- #nav-menu-container -->
+      </div>
+    </header><!-- #header -->
+    
+    <!--==========================
+	Hero Section
+	============================-->
+  
+    <!-- Seems to need container and member class for the button to be centered-->
+    <div class="container">&nbsp</div>
+    <div class="member">&nbsp</div>
+    <div class="form-row text-center">
+      <div id="create-contract" class="col-12">
+	      <button class="btn mybutton button1" data-toggle="modal" data-target="#contact_dialog">Create Contract</button>
+      </div>
+    </div>
+
+    <!-- Modal -->
+
+    <div class="modal fade bd-example-modal-lg" id="contact_dialog" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title" id="contact_dialog">Contract Form</h1>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="contact_form" action="/contract_form.php" method="POST">
+	            <div class="modal-body">  
+                <label for="first_name">First Name:</label>
+                <input type="name" class="form-control" id="first_name" placeholder="Enter First Name" name="first name" required>
+	            </div>
+              <div class="modal-body">
+                <label for="last_name">Last Name:</label>
+                <input type="name" class="form-control" id="last_name" placeholder="Enter Last Name" name="last name" required>
+              </div>
+              <div class="modal-body">
+                <label for="address">Address:</label>
+                <input type="text" class="form-control" onFocus="geolocate()" id="autocomplete" placeholder="Enter Address" name="address">
+              </div>
+              <div class="modal-body">
+                <label for="place_id">Place ID:</label>
+                <input type="text" class="form-control" id="place_id" placeholder="Address's Place ID" name="place_id" disabled="True" required>
+              </div>
+              <div class="modal-body">
+                <label for="max_tenant">Max Number of Tenants:</label>
+                <input type="number" class="form-control" id="max_tenant" placeholder="Enter Maximum Number of Tenants" name="quantity" min="1" max="10" required>
+              </div>
+              <div class="modal-body">
+                <label for="start_date">Start Date:</label>
+                <input type="date" class="form-control" id="start_date" placeholder="Enter Start Date" name="start">
+              </div>
+              <div class="modal-body">
+                <label for="end_date">End Date:</label>
+                <input type="date" class="form-control" id="end_date" placeholder="Enter End Date" name="end">
+              </div>
+              <div class="modal-body">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter Email address" name="email">
+              </div>
+              <div class="modal-body">
+                <label for="">Security Deposit:</label>
+                <input type="number" class="form-control" id="deposit" placeholder="Enter Deposit Amount" name="deposit">
+              </div>
+              <div class="modal-body">
+                <label for="rent">Monthly Rent:</label>
+                <input type="number" class="form-control" id="rent" placeholder="Enter Rent Amount" name="rent">
+              </div>
+            </form>
+          </div>
+             
+          <div class="col-m-12">
+            <div class="text-center">
+              <button type="button" id="close-button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	      &nbsp;&nbsp;&nbsp;&nbsp;
+              <button type="button" class="btn btn-primary" onclick="validate()">Submit<i class="fa fa-paper-plane-o ml-1"></i></button>
+	            <br><br>
+
+              <!-- Contract Alerts -->
+              <div id="incomplete-contract-alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                <h5 class="alert-heading">A first name, last name, and place ID are required to make a new contract.
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                </h5>
+              </div>
+              <div id="failed-contract-alert" class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+                <h5 class="alert-heading">There was an error creating the contract
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                </h5>
+              </div>
+
+            </div>
+	        </div>
+        </div>
+      </div>
+    </div>
+    
+    <section id="about">
+      <div class="container">
+          <div class="table-responsive text-nowrap">
+              <table id="landlord-table" class="table table-striped table-hover" margin="0px auto">     
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col">Contract Address</th>
+                    <th scope="col">Landlord Name</th>
+                    <th scope="col"># Tenants</th>
+                    <th scope="col">Max Tenants</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">Security Deposit</th>
+                    <th scope="col">Monthly Rent</th>
+                    <th scope="col">googlePlaceId</th>
+                    <th scope="col">Active</th>
+                    <th scope="col">Signed</th>
+                  </tr>
+                </thead>
+                <tbody></tbody> <!-- landlord contracts here -->
+              </table>
+              <div id="no-contracts-alert" class="alert alert-info mt-2" role="alert " style="display: none;">
+                <h5 class="alert-heading">No SmartLeases owned by current user!</h5>
+                <hr>
+                <p>If this is unexpected make sure you have the right user selected and are connected to the correct network</p>
+              </div>
+          </div>
+        <div>
+          <div class="container">
+	          <p align="center">
+              <table id="tenant-table" class="table table-striped table-hover" margin="0px auto">     
+                <thead>
+                  <tr>
+                    <th class="th-contract" scope="col">Contract Address</th>
+                    <th class="th-contract" scope="col">Landlord Name</th>
+                    <th class="th-contract" scope="col"># Tenants</th>
+                    <th class="th-contract" scope="col">Max Tenants</th>
+                    <th class="th-contract" scope="col">Start Date</th>
+                    <th class="th-contract" scope="col">End Date</th>
+                    <th class="th-contract" scope="col">Security Deposit</th>
+                    <th class="th-contract" scope="col">Monthly Rent</th>
+                    <th class="th-contract" scope="col">googlePlaceId</th>
+                    <th class="th-contract" scope="col">Active</th>
+                    <th class="th-contract" scope="col">Signed</th>             
+                  </tr>
+                </thead>
+                <tbody></tbody> <!-- tenant contracts here -->
+              </table>
+            </p>  
+          </div>
+        </div>
+
+        <!-- Delete dialog modal -->
+        <div class="modal fade" id="delete-dialog" tabindex="-1" role="dialog" aria-labelledby="deleteContractDialog" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="delete-contract-dialog">Delete this contract?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                If you delete this contract it will become <strong>completely inaccessible</strong> and any <strong>remaining funds will be transferred to the contract's owner</strong>.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </body>  
+  <!--- MENU-CONTRACTS END -->
+  <!--- MENU-HELP START -->
+  <!--==========================
+      Footer
+      ============================-->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container"></div>
+    </div>
+    
+    <div class="container">
+      <div class="copyright">
+        Copyright &copy; 2018 <strong>SmartLease</strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        <!--
+            All the links in the footer should remain intact.
+            You can delete the links only if you purchased the pro version.
+            Licensing information: https://bootstrapmade.com/license/
+            Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Regna
+          -->
+        Bootstrap Templates by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer><!-- #footer -->
+  
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  
+  <!-- JavaScript Libraries -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/jquery/jquery-migrate.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/wow/wow.min.js"></script>
+  
+  <script src="lib/waypoints/waypoints.min.js"></script>
+  <script src="lib/counterup/counterup.min.js"></script>
+  <script src="lib/superfish/hoverIntent.js"></script>
+  <script src="lib/superfish/superfish.min.js"></script>
+  
+  <!-- Moment.js for time handling -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+
+  <!-- Web3 1.0.0-beta.34 bundle created with Browserify -->
+  <script src="lib/web3/web3js.browserify.js"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="js/main.js"></script>
+
+  <!-- SmartLease UI interaction -->
+  <script src="js/smartlease.js"></script>
+
+  <!-- Contract Place ID autocomplete -->
+  <script type="text/javascript" src="js/autocomplete.js"></script>
+
+  <!-- Google Places API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwX5hiiWlEoRwPZlVoENRLSng5xMs_t4Q&libraries=places&callback=initAutocomplete"
+       async defer></script>
+
+  <script src="js/validate_contract.js"></script>
+</html>
